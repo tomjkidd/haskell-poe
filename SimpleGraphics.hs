@@ -1,15 +1,18 @@
 module SimpleGraphics where
 
+import Data.Function
 import SOE
+
 
 spaceClose :: Window -> IO()
 spaceClose w = do k <- getKey w
                   if k == ' '
                     then closeWindow w
                     else spaceClose w
-
+pic1 :: Graphic
 pic1 = withColor Red (ellipse (150, 150) (300, 200))
 
+pic2 :: Graphic
 pic2 = withColor Blue (polyline [(100, 50), (200, 50), (200, 250), (100, 250), (100, 50)])
 
 main1 :: IO ()
@@ -45,8 +48,50 @@ sierpinskiTri w x y size =
              sierpinskiTri w x (y - size2) size2
              sierpinskiTri w (x + size2) y size2
 
+main3 :: IO ()
 main3 = runGraphics (
   do w <- openWindow "Sierpinski's Triangle" (400, 400)
      sierpinskiTri w 50 300 256
      spaceClose w
   )
+
+displayGraphic :: Graphic -> IO ()
+displayGraphic g = runGraphics (
+  do w <- openWindow "Graphic Window" (500, 500)
+     drawInWindow w g
+     spaceClose w
+  )
+
+-- NOTE: Data.Function.& is similar to Elm's |> operator
+(|>) :: a -> (a -> b) -> b
+(|>) = (&)
+
+lineDemo :: IO ()
+lineDemo =
+  line (0,0) (250, 250)
+  |> displayGraphic
+
+polylineDemo :: IO ()
+polylineDemo =
+  polyline [(50,50), (250, 250), (450, 50)]
+  |> displayGraphic
+
+polybezierDemo :: IO ()
+polybezierDemo =
+  polyBezier [(50,50), (250, 250), (450, 50)]
+  |> displayGraphic
+
+polygonDemo :: IO ()
+polygonDemo =
+  polygon [(50,50), (250, 250), (450, 50)]
+  |> displayGraphic
+
+ellipseDemo :: IO ()
+ellipseDemo =
+  ellipse (50, 200) (450, 300)
+  |> displayGraphic
+  
+shearEllipseDemo :: IO ()
+shearEllipseDemo =
+  shearEllipse (50,50) (125, 450) (125, 50)
+  |> displayGraphic
