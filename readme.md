@@ -14,3 +14,8 @@ Load Shape module (in GHCi)
     ```ghci
     :load Shape
     ```
+
+Build main
+    ``` bash
+    ghc -o main Main.hs
+    ```
