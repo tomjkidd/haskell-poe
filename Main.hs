@@ -4,9 +4,7 @@ import Data.List
 import System.Environment
 import qualified BasicInputOutput as BIO
 import qualified SimpleGraphics as SG
-
-main1 :: IO ()
-main1 = SG.polybezierDemo
+import Draw
 
 data Demo = Demo {
   name :: String,
@@ -16,6 +14,17 @@ data Demo = Demo {
 demos :: [Demo]
 demos = 
   [
+    -- ----------------------
+    -- BasicInputOutput Demos
+    -- ----------------------
+    Demo
+    { name = "sequence",
+      eval = BIO.sequenceDemo
+    },
+
+    -- --------------------
+    -- SimpleGraphics Demos
+    -- --------------------
     Demo
     { name = "line",
       eval = SG.lineDemo
@@ -44,6 +53,19 @@ demos =
     Demo
     { name = "shearellipse",
       eval = SG.shearEllipseDemo
+    },
+
+    -- --------------------
+    -- Draw Demos
+    -- --------------------
+    Demo
+    { name = "draw1",
+      eval = Draw.shapeDemo1
+    },
+
+    Demo
+    { name = "draw2",
+      eval = Draw.shapeDemo2
     }
   ]
 

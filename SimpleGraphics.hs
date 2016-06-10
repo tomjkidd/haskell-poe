@@ -2,13 +2,8 @@ module SimpleGraphics where
 
 import Data.Function
 import SOE
+import Common
 
-
-spaceClose :: Window -> IO()
-spaceClose w = do k <- getKey w
-                  if k == ' '
-                    then closeWindow w
-                    else spaceClose w
 pic1 :: Graphic
 pic1 = withColor Red (ellipse (150, 150) (300, 200))
 
