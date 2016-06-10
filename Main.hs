@@ -66,6 +66,11 @@ demos =
     Demo
     { name = "draw2",
       eval = Draw.shapeDemo2
+    },
+
+    Demo
+    { name = "draw3",
+      eval = Draw.shapeDemo3
     }
   ]
 

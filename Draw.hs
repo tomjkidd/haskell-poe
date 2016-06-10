@@ -1,6 +1,6 @@
 module Draw (inchToPixel, pixelToInch, intToFloat,
              xWin, yWin, trans, shapeToGraphic,
-             shapeDemo1, shapeDemo2
+             shapeDemo1, shapeDemo2, shapeDemo3
             )where
 
 import Shape
@@ -77,5 +77,21 @@ shapeDemo2
   = runGraphics (
     do w <- openWindow "Shape Demo 2" (xWin, yWin)
        drawShapes w shapes
+       spaceClose w
+    )
+
+shapeDemo3 :: IO ()
+shapeDemo3
+  = runGraphics (
+    do w <- openWindow "Shape Demo 3" (xWin, yWin)
+       drawShapes w [
+         (Red, Rectangle 5.5 4.5),
+         (Blue, Ellipse 3 2.5),
+         (Cyan, Ellipse 3 2),
+         (Yellow, RtTriangle (-3) (-2)),
+         (White, RtTriangle 3 (-2)),
+         (Magenta, Polygon [(-3, 0), (0, 3), (3, 0)]),
+         (Black, Polygon [(-2, 0), (0, 2), (2, 0)]),
+         (Green, Polygon [(-1, 0), (0, 1), (1, 0)])]
        spaceClose w
     )
