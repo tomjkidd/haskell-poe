@@ -1,6 +1,6 @@
 module Draw (inchToPixel, pixelToInch, intToFloat,
              xWin, yWin, trans, shapeToGraphic,
-             shapeDemo1, shapeDemo2, shapeDemo3
+             shapeDemo1, shapeDemo2, shapeDemo3, shapeDemo4
             )where
 
 import Shape
@@ -68,9 +68,9 @@ shapes = [(Red, sh1), (Blue, sh2), (Yellow, sh3), (Magenta, sh4)]
 
 drawShapes :: Window -> ColoredShapes -> IO ()
 drawShapes _ [] = return ()
-drawShapes w ((c,s):cs) =
-  do drawInWindow w (withColor c (shapeToGraphic s))
-     drawShapes w cs
+drawShapes w css =
+  sequence_ $ map drawShape css
+  where drawShape (c,s) = drawInWindow w (withColor c (shapeToGraphic s))
 
 shapeDemo2 :: IO ()
 shapeDemo2
@@ -95,3 +95,16 @@ shapeDemo3
          (Green, Polygon [(-1, 0), (0, 1), (1, 0)])]
        spaceClose w
     )
+
+conCircles :: [Shape]
+conCircles = map circle [2.4, 2.1..0.3]
+
+coloredCircles :: [(Color, Shape)]
+coloredCircles =
+  zip [Black, Blue, Green, Cyan, Red, Magenta, Yellow, White] conCircles
+
+shapeDemo4 :: IO ()
+shapeDemo4 =
+  runGraphics $ do w <- openWindow "Shape Demo 4" (xWin, yWin)
+                   drawShapes w coloredCircles
+                   spaceClose w
