@@ -71,7 +71,9 @@ polygonAreaV1 _ = 0
 
 
 area :: Shape -> Float
-area (Rectangle s1 s2) = s1 * s2
+area (Rectangle s1 s2)
+  | s1 >= 0 && s2 >= 0 = s1 * s2
+  | otherwise = error "area: negative side lengths"
 area (Ellipse r1 r2) = pi * r1 * r2
 area (RtTriangle s1 s2) = 1/2 * s1 * s2
 area (Polygon vs) = polygonAreaV1 vs
