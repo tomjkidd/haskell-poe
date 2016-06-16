@@ -80,3 +80,16 @@ reverse xs = rev [] xs
 
 reverse2 :: [a] -> [a]
 reverse2 xs = Misc.foldl (:) [] xs
+
+data List a = Nil | MakeList a (List a)
+  deriving Show
+
+data BinaryTree a = Leaf a | Branch (BinaryTree a) (BinaryTree a)
+
+data InternalTree a = ILeaf | IBranch a (InternalTree a) (InternalTree a)
+
+data FancyTree a b = FLeaf a | FBranch b (FancyTree a b) (FancyTree a b)
+
+mapTree :: (a -> b) -> BinaryTree a -> BinaryTree b
+mapTree f (Leaf a) = Leaf (f a)
+mapTree f (Branch l r) = (Branch (mapTree f l) (mapTree f r))
