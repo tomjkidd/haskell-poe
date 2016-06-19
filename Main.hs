@@ -110,6 +110,11 @@ demos =
     Demo
     { name = "picture6",
       eval = Picture.demo6
+    },
+
+    Demo
+    { name = "picture7",
+      eval = Picture.demo7
     }
   ]
 

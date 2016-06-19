@@ -4,7 +4,7 @@ module Picture (Picture (Region, Over, EmptyPic),
                 Color (Black, Blue, Green, Cyan, Red, Magenta, Yellow, White),
                 regionToGRegion, shapeToGRegion,
                 drawRegionInWindow, drawPic, draw,
-                demo1, demo2, demo3, demo4, demo5, demo6,
+                demo1, demo2, demo3, demo4, demo5, demo6, demo7,
                 module Region
                ) where
 
@@ -148,3 +148,42 @@ demo5 = draw "pic5" pic5
 
 demo6 :: IO ()
 demo6 = draw "pic6" pic6
+
+pictToList :: Picture -> [(Color, Region)]
+pictToList EmptyPic = []
+pictToList (Region c r) = [(c, r)]
+pictToList (p1 `Over` p2) = pictToList p1 ++ pictToList p2
+
+adjust :: [(Color, Region)] -> Coordinate -> (Maybe (Color, Region), [(Color, Region)])
+adjust [] _ = (Nothing, [])
+adjust regs p =
+  case (break (\(_, r) -> r `containsR` p) regs) of
+    (top, hit:rest) -> (Just hit, top ++ rest)
+    (_, []) -> (Nothing, regs)
+
+loop :: Window -> [(Color, Region)] -> IO ()
+loop w regs =
+  do clearWindow w
+     sequence_ [drawRegionInWindow w c r | (c,r) <- reverse regs]
+     (x,y) <- getLBP w
+     case (adjust regs (pixelToInch (x - xWin2),
+                        pixelToInch (yWin2 - y))) of
+       (Nothing, _) -> closeWindow w
+       (Just hit, newRegs) -> loop w (hit:newRegs)
+
+draw2 :: String -> Picture -> IO ()
+draw2 s p =
+  runGraphics $ do w <- openWindow s (xWin, yWin)
+                   loop w (pictToList p)
+
+p1',p2',p3',p4' :: Picture
+p1' = Region Red r1'
+p2' = Region Blue r2'
+p3' = Region Green r3'
+p4' = Region Yellow r4'
+
+pic :: Picture
+pic = foldl Over EmptyPic [p1',p2',p3',p4']
+
+demo7 :: IO ()
+demo7 = draw2 "Picture Click Test"  pic

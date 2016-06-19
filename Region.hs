@@ -33,9 +33,8 @@ containsS :: Shape -> Coordinate -> Bool
 (Ellipse r1 r2) `containsS` (x,y) =
   (x/r1)^2 + (y/r2)^2 <= 1
 (Polygon pts) `containsS` p =
-  let leftOfList = map isLeftOfp
+  let leftOfList= map (isLeftOf p)
                    (zip pts (tail pts ++ [head pts]))
-      isLeftOfp p' = isLeftOf p p'
   in and leftOfList
 (RtTriangle s1 s2) `containsS` p =
   (Polygon [(0, 0), (s1, 0), (0, s2)]) `containsS` p
