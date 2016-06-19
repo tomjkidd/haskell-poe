@@ -31,7 +31,7 @@ containsS :: Shape -> Coordinate -> Bool
       t2 = s2/2
   in -t1 <= x && x <= t1 && -t2 <= y && y <= t2
 (Ellipse r1 r2) `containsS` (x,y) =
-  (x/r1)^2 + (y/r2)^2 <= 1
+  (x/r1)^(2::Integer) + (y/r2)^(2::Integer) <= 1
 (Polygon pts) `containsS` p =
   let leftOfList= map (isLeftOf p)
                    (zip pts (tail pts ++ [head pts]))
@@ -52,6 +52,6 @@ containsR :: Region -> Coordinate -> Bool
 (Translate (u,v) r) `containsR` (x, y) = r `containsR` (x - u, y - v)
 (Scale (u,v) r) `containsR` (x, y) = r `containsR` (x/u, y/v)
 (Complement r) `containsR` p = not (r `containsR` p)
-Empty `containsR` p = False
+Empty `containsR` _ = False
 (r1 `Union` r2) `containsR` p = r1 `containsR` p || r2 `containsR` p
 (r1 `Intersect` r2) `containsR` p = r1 `containsR` p && r2 `containsR` p
