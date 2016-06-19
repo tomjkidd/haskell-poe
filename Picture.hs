@@ -4,6 +4,7 @@ module Picture (Picture (Region, Over, EmptyPic),
                 Color (Black, Blue, Green, Cyan, Red, Magenta, Yellow, White),
                 regionToGRegion, shapeToGRegion,
                 drawRegionInWindow, drawPic, draw,
+                demo1, demo2, demo3, demo4, demo5,
                 module Region
                ) where
 
@@ -70,9 +71,60 @@ shapeToGRegion (lx, ly) (sx, sy) s =
       -> createPolygon (map trans' [(0, 0), (s1, 0), (0, s2)])
   where trans' :: Vertex -> Point
         trans' (x, y) = (xWin2 + inchToPixel (lx + x * sx),
-                        yWin2 + inchToPixel (ly + y * sy))
+                        yWin2 - inchToPixel (ly + y * sy))
 
 draw :: String -> Picture -> IO ()
 draw s p = runGraphics $ do w <- openWindow s (xWin, yWin)
                             drawPic w p
                             spaceClose w
+
+xUnion :: Region -> Region -> Region
+p1 `xUnion` p2 = (p1 `Intersect` Complement p2) `Union`
+                 (p2 `Intersect` Complement p1)
+
+r1',r2',r3',r4',reg1,reg2,oneCircle,fiveCircles,boundingRect :: Region
+manyCircles :: [Region]
+
+pic1,pic2,pic3,pic4,pic5 :: Picture
+r1' = Shape (Rectangle 3 2)
+r2' = Shape (Ellipse 1 1.5)
+r3' = Shape (RtTriangle 3 2)
+r4' = Shape (Polygon [(-2.5, 2.5), (-3.0, 0), (-1.7, -1.0), (-1.1, 0.2), (-1.5, 2.0)])
+
+reg1 = r3' `xUnion` (r1' `Intersect` Complement r2' `Union` r4')
+pic1 = Region Blue reg1
+
+reg2 = let circle' = Shape (Ellipse 0.5 0.5)
+           square' = Shape (Rectangle 1 1)
+       in (Scale (2, 2) circle')
+          `Union` (Translate (1, 0) square')
+          `Union` (Translate (-1, 0) square')
+
+pic2 = Region Yellow (Translate (0, -1) reg2)
+
+pic3 = pic2 `Over` pic1
+
+oneCircle = Scale (0.25, 0.25) (Shape (Ellipse 1 1))
+manyCircles = [Translate ( x * 0.25, 0) oneCircle | x <- [0, 2..]]
+fiveCircles = foldr Union Empty (take 5 manyCircles)
+
+boundingRect = (Translate (1, 0) (Shape (Rectangle 2.5 0.5)))
+
+pic4 = Region Magenta fiveCircles `Over` Region Yellow boundingRect
+
+pic5 = Region Magenta (fiveCircles `xUnion` boundingRect)
+
+demo1 :: IO ()
+demo1 = draw "pic1" pic1
+
+demo2 :: IO ()
+demo2 = draw "pic2" pic2
+
+demo3 :: IO ()
+demo3 = draw "pic3" pic3
+
+demo4 :: IO ()
+demo4 = draw "pic4" pic4
+
+demo5 :: IO ()
+demo5 = draw "pic5" pic5

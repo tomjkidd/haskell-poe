@@ -5,6 +5,7 @@ import System.Environment
 import qualified BasicInputOutput as BIO
 import qualified SimpleGraphics as SG
 import Draw
+import Picture
 
 data Demo = Demo {
   name :: String,
@@ -76,8 +77,35 @@ demos =
     Demo
     { name = "draw4",
       eval = Draw.shapeDemo4
-    }
-  ]
+    },
+
+    -- --------------------
+    -- Picture Demos
+    -- --------------------
+    Demo
+    { name = "picture1",
+      eval = Picture.demo1
+    },
+
+    Demo
+    { name = "picture2",
+      eval = Picture.demo2
+    },
+
+    Demo
+    { name = "picture3",
+      eval = Picture.demo3
+    },
+
+    Demo
+    { name = "picture4",
+      eval = Picture.demo4
+    },
+
+    Demo
+    { name = "picture5",
+      eval = Picture.demo5
+    }]
 
 main :: IO ()
 main = do  

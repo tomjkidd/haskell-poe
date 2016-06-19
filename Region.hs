@@ -56,14 +56,3 @@ containsR :: Region -> Coordinate -> Bool
 Empty `containsR` p = False
 (r1 `Union` r2) `containsR` p = r1 `containsR` p || r2 `containsR` p
 (r1 `Intersect` r2) `containsR` p = r1 `containsR` p && r2 `containsR` p
-
-demo =
-  let circle = Shape (Ellipse 0.5 0.5)
-      square = Shape (Rectangle 1 1)
-  in (Scale (2,2) circle)
-     `Union` (Translate (1, 0) square)
-     `Union` (Translate (-1, 0) square)
-
-oneCircle = Shape (Ellipse 1 1)
-manyCircles = [Translate (x, 0) oneCircle | x <- [0, 2..]]
-fiveCircles = foldr Union Empty (take 5 manyCircles)
