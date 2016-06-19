@@ -4,7 +4,7 @@ module Picture (Picture (Region, Over, EmptyPic),
                 Color (Black, Blue, Green, Cyan, Red, Magenta, Yellow, White),
                 regionToGRegion, shapeToGRegion,
                 drawRegionInWindow, drawPic, draw,
-                demo1, demo2, demo3, demo4, demo5,
+                demo1, demo2, demo3, demo4, demo5, demo6,
                 module Region
                ) where
 
@@ -82,10 +82,12 @@ xUnion :: Region -> Region -> Region
 p1 `xUnion` p2 = (p1 `Intersect` Complement p2) `Union`
                  (p2 `Intersect` Complement p1)
 
-r1',r2',r3',r4',reg1,reg2,oneCircle,fiveCircles,boundingRect :: Region
+r1',r2',r3',r4',reg1,reg2
+  ,oneCircle,fiveCircles,boundingRect :: Region
+  
 manyCircles :: [Region]
 
-pic1,pic2,pic3,pic4,pic5 :: Picture
+pic1,pic2,pic3,pic4,pic5,pic6 :: Picture
 r1' = Shape (Rectangle 3 2)
 r2' = Shape (Ellipse 1 1.5)
 r3' = Shape (RtTriangle 3 2)
@@ -110,9 +112,24 @@ fiveCircles = foldr Union Empty (take 5 manyCircles)
 
 boundingRect = (Translate (1, 0) (Shape (Rectangle 2.5 0.5)))
 
+{- Here I divided 360 by 5 to get 72 between each vertex.
+By generating the list using [0, 72..] I go around the entire circle.
+By adding 18 degrees to each vertex, I can position a vertex on (0, 1).
+-}
+pentagonPts :: [(Float, Float)]
+pentagonPts = let degrees = map (+ 18) $ take 6 [0, 72..]
+                  cosXs = map (cos . degreesToRadians) degrees
+                  sinXs = map (sin . degreesToRadians) degrees
+              in zip cosXs sinXs
+
+pentagon :: Region
+pentagon = (Shape (Polygon pentagonPts))
+
 pic4 = Region Magenta fiveCircles `Over` Region Yellow boundingRect
 
 pic5 = Region Magenta (fiveCircles `xUnion` boundingRect)
+
+pic6 = Region Red (Scale (0.5, 0.5) pentagon) `Over` Region Blue pentagon
 
 demo1 :: IO ()
 demo1 = draw "pic1" pic1
@@ -128,3 +145,6 @@ demo4 = draw "pic4" pic4
 
 demo5 :: IO ()
 demo5 = draw "pic5" pic5
+
+demo6 :: IO ()
+demo6 = draw "pic6" pic6

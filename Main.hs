@@ -105,7 +105,13 @@ demos =
     Demo
     { name = "picture5",
       eval = Picture.demo5
-    }]
+    },
+
+    Demo
+    { name = "picture6",
+      eval = Picture.demo6
+    }
+  ]
 
 main :: IO ()
 main = do  
