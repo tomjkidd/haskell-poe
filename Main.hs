@@ -6,6 +6,7 @@ import qualified BasicInputOutput as BIO
 import qualified SimpleGraphics as SG
 import Draw
 import Picture
+import Animation
 
 data Demo = Demo {
   name :: String,
@@ -115,6 +116,29 @@ demos =
     Demo
     { name = "picture7",
       eval = Picture.demo7
+    },
+
+    -- --------------------
+    -- Animation Demos
+    -- --------------------
+    Demo
+    { name = "animation1",
+      eval = Animation.demo1
+    },
+
+    Demo
+    { name = "animation2",
+      eval = Animation.demo2
+    },
+
+    Demo
+    { name = "animation3",
+      eval = Animation.demo3
+    },
+
+    Demo
+    { name = "animation4",
+      eval = Animation.demo4
     }
   ]
 
