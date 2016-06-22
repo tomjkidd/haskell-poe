@@ -33,8 +33,11 @@ containsS :: Shape -> Coordinate -> Bool
 (Ellipse r1 r2) `containsS` (x,y) =
   (x/r1)^(2::Integer) + (y/r2)^(2::Integer) <= 1
 (Polygon pts) `containsS` p =
-  let leftOfList= map (isLeftOf p)
-                   (zip pts (tail pts ++ [head pts]))
+  let pts' = case determineOrientation pts of
+               Clockwise -> reverse pts
+               CounterClockwise -> pts
+      leftOfList = map (isLeftOf p)
+                   (zip pts' (tail pts' ++ [head pts']))
   in and leftOfList
 (RtTriangle s1 s2) `containsS` p =
   (Polygon [(0, 0), (s1, 0), (0, s2)]) `containsS` p
