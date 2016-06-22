@@ -3,7 +3,7 @@
 module Region (Region (Shape, Translate, Scale, Complement,
                        Union, Intersect, Empty),
                 Coordinate,
-                containsS, containsR,
+                containsS, containsR, determineOrientation,
                 module Shape
               ) where
 
@@ -55,3 +55,17 @@ containsR :: Region -> Coordinate -> Bool
 Empty `containsR` _ = False
 (r1 `Union` r2) `containsR` p = r1 `containsR` p || r2 `containsR` p
 (r1 `Intersect` r2) `containsR` p = r1 `containsR` p && r2 `containsR` p
+
+data Orientation = Clockwise | CounterClockwise
+  deriving Show
+
+{- Did a little search on SO and followed the answer provided there
+
+http://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order-}
+determineOrientation :: [Coordinate] -> Orientation
+determineOrientation ps =
+  let qs = tail ps ++ [head ps]
+      intermediate = zipWith (\(x1,y1) (x2,y2) -> (x2 - x1) * (y2 + y1)) ps qs
+      result = sum intermediate
+  in if result >= 0 then Clockwise
+     else CounterClockwise

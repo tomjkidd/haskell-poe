@@ -10,3 +10,6 @@ spaceClose w = do k <- getKey w
 
 degreesToRadians :: Float -> Float
 degreesToRadians d = d * (pi/180)
+
+xor :: Bool -> Bool -> Bool
+xor x y = not x == y
